@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Integrado SENI - Organismo Coordinador</title>
+    
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- ECharts para gráficos avanzados -->
+    <script src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+    
+    
+    
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- TABS PRINCIPALES -->
+    <div class="main-tabs">
+        <div class="container">
+            <button class="main-tab" data-tab="Generadores">
+                <i class="bi bi-lightning-charge-fill"></i> Gestor de Generadores
+            </button>
+            <button class="main-tab" data-tab="red">
+                <i class="bi bi-diagram-3-fill"></i> Gestor de Red
+            </button>
+            <button class="main-tab active" data-tab="demanda">
+                <i class="bi bi-graph-up-arrow"></i> Gestor de Demanda
+            </button>
+        </div>
+    </div>
+
+
+
+
+
+    
+    <!-- TAB 1: GESTOR DE GENERADORAS -->
+    <div id="tab-Generadores" class="tab-content-main">
+        <div class="main-container">
+            <div class="page-header">
+                <div class="page-header-icon">
+                    <i class="bi bi-lightning-charge-fill"></i>
+                </div>
+                <div class="page-header-text">
+                    <h1 class="page-title">Gestor de Generadores SENI</h1>
+                    <p class="page-subtitle">Sistema Eléctrico Nacional Interconectado - República Dominicana</p>
+                </div>
+            </div>
+
+            <div class="stats-grid" id="statsGen"></div>
+
+<div class="controls-section">
+    <!-- Fila 1: Breadcrumb + Botones de Acción -->
+    <div class="control-row row-header">
+        <div class="breadcrumb-fluent" id="breadcrumbsGen">
+            <div class="breadcrumb-item">
+                <button onclick="navigateToGen([])">
+                    <i class="bi bi-house-fill"></i> Inicio
+                </button>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn-fluent btn-success" id="addBtnGen">
+                <i class="bi bi-plus-circle"></i> Agregar
+            </button>
+            <button class="btn-fluent btn-primary" id="exportBtnGen">
+                <i class="bi bi-download"></i> Exportar
+            </button>
+            <button class="btn-fluent btn-secondary" id="importBtnGen">
+                <i class="bi bi-upload"></i> Importar
+            </button>
+        </div>
+    </div>
+
+    <!-- Fila 2: Búsqueda + Filtro + Vista Toggle -->
+    <div class="control-row row-filters">
+        <div class="search-bar">
+            <i class="bi bi-search search-icon"></i>
+            <input type="text" id="searchGen" class="search-input" placeholder="Buscar elementos...">
+        </div>
+        
+        <div class="filter-toggle">
+            <label>
+                <input type="checkbox" id="filterStateGen" checked>
+                <i class="bi bi-funnel-fill"></i>
+                <span>Solo activos</span>
+            </label>
+        </div>
+
+        <div class="view-toggle">
+            <button class="active" data-view="cards"><i class="bi bi-grid-3x3-gap-fill"></i> Tarjetas</button>
+            <button data-view="table"><i class="bi bi-table"></i> Tabla</button>
+        </div>
+    </div>
+
+    <!-- Fila 3: Indicador de nivel actual (si aplica) -->
+    <div class="control-row row-indicator" id="currentLevelIndicatorGen"></div>
+</div>
+
+            <div id="contentGen"></div>
+        </div>
+    </div>
+
+    <!-- TAB 2: GESTOR DE RED -->
+    <div id="tab-red" class="tab-content-main">
+        <div class="main-container">
+            <div class="page-header">
+                <div class="page-header-icon">
+                    <i class="bi bi-diagram-3-fill"></i>
+                </div>
+                <div class="page-header-text">
+                    <h1 class="page-title">Gestor de Red Eléctrica</h1>
+                    <p class="page-subtitle">Gestión de Buses, Generadores, Líneas y Transformadores - SENI</p>
+                </div>
+            </div>
+
+            <div class="stats-grid" id="statsNet"></div>
+
+<div class="controls-section">
+    <!-- Fila 1: Breadcrumb + Botones de Acción -->
+    <div class="control-row row-header">
+        <div class="breadcrumb-fluent" id="breadcrumbsNet">
+            <div class="breadcrumb-item">
+                <i class="bi bi-diagram-3-fill"></i> Sistema de Red
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn-fluent btn-success" id="addBtnNet">
+                <i class="bi bi-plus-circle"></i> Agregar
+            </button>
+            <button class="btn-fluent btn-primary" id="exportBtnNet">
+                <i class="bi bi-download"></i> Exportar
+            </button>
+            <button class="btn-fluent btn-secondary" id="importBtnNet">
+                <i class="bi bi-upload"></i> Importar
+            </button>
+        </div>
+    </div>
+
+    <!-- Fila 2: Búsqueda + Vista Toggle -->
+    <div class="control-row row-filters">
+        <div class="search-bar">
+            <i class="bi bi-search search-icon"></i>
+            <input type="text" id="searchNet" class="search-input" placeholder="Buscar elementos...">
+        </div>
+
+        <div class="view-toggle">
+            <button class="active" data-view="cards"><i class="bi bi-grid-3x3-gap-fill"></i> Tarjetas</button>
+            <button data-view="table"><i class="bi bi-table"></i> Tabla</button>
+        </div>
+    </div>
+
+    <!-- Fila 3: Indicador de categoría actual -->
+    <div class="control-row row-indicator" id="currentCategoryIndicator"></div>
+</div>
+
+            <div id="contentNet"></div>
+        </div>
+    </div>
+
+    <!-- TAB 3: GESTOR DE DEMANDA -->
+    <div id="tab-demanda" class="tab-content-main active">
+        <div class="main-container">
+            <div class="page-header">
+                <div class="page-header-icon">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+                <div class="page-header-text">
+                    <h1 class="page-title">Gestor de Cargas Eléctricas</h1>
+                    <p class="page-subtitle">Administración de Demanda P y Q - Sistema Eléctrico Nacional Interconectado</p>
+                </div>
+            </div>
+
+            <div class="stats-grid" id="statsDemand"></div>
+
+<div class="controls-section">
+    <!-- Fila 1: Breadcrumb + Botones de Acción -->
+    <div class="control-row row-header">
+        <div class="breadcrumb-fluent" id="breadcrumbsDemand">
+            <div class="breadcrumb-item">
+                <i class="bi bi-graph-up-arrow"></i> Gestor de Cargas
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn-fluent btn-success" id="addBtnDemand">
+                <i class="bi bi-plus-circle"></i> Agregar
+            </button>
+            <button class="btn-fluent btn-primary" id="exportBtnDemand">
+                <i class="bi bi-download"></i> Exportar
+            </button>
+            <button class="btn-fluent btn-secondary" id="importBtnDemand">
+                <i class="bi bi-upload"></i> Importar
+            </button>
+        </div>
+    </div>
+
+    <!-- Fila 2: Búsqueda + Filtro + Vista Toggle -->
+    <div class="control-row row-filters">
+        <div class="search-bar">
+            <i class="bi bi-search search-icon"></i>
+            <input type="text" id="searchDemand" class="search-input" placeholder="Buscar cargas...">
+        </div>
+        
+        <div class="filter-toggle">
+            <label>
+                <input type="checkbox" id="filterStateDemand" checked>
+                <i class="bi bi-funnel-fill"></i>
+                <span>Solo activos</span>
+            </label>
+        </div>
+
+        <div class="view-toggle">
+            <button class="active" data-view="cards"><i class="bi bi-grid-3x3-gap-fill"></i> Tarjetas</button>
+            <button data-view="table"><i class="bi bi-table"></i> Tabla</button>
+            <button data-view="chart"><i class="bi bi-bar-chart-fill"></i> Gráficos</button>
+        </div>
+    </div>
+
+    <!-- Fila 3: Controles de Tiempo -->
+    <div class="time-controls" id="timeControlsDemand">
+        <div class="time-control-group">
+            <label for="startDateDemand"><i class="bi bi-calendar-event"></i> Desde:</label>
+            <input type="datetime-local" id="startDateDemand" class="form-input" lang="en-GB">
+        </div>
+        <div class="time-control-group">
+            <label for="endDateDemand"><i class="bi bi-calendar-event"></i> Hasta:</label>
+            <input type="datetime-local" id="endDateDemand" class="form-input" lang="en-GB">
+        </div>
+        <div class="time-control-group">
+            <label for="resolutionDemand"><i class="bi bi-clock"></i> Resolución:</label>
+            <select id="resolutionDemand" class="form-input">
+                <option value="1">1 minuto</option>
+                <option value="5">5 minutos</option>
+                <option value="15">15 minutos</option>
+                <option value="30">30 minutos</option>
+                <option value="60" selected>60 minutos</option>
+            </select>
+        </div>
+        <button class="btn-fluent btn-primary" id="applyTimeFilterDemand">
+            <i class="bi bi-funnel"></i> Aplicar
+        </button>
+    </div>
+</div>
+
+            <div id="contentDemand"></div>
+        </div>
+    </div>
+
+    <!-- MODAL GENERADORAS -->
+    <div class="modal-overlay" id="modalGen">
+        <div class="modal-fluent">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitleGen">Editar</h2>
+                <button class="modal-close" onclick="closeModalGen()"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="modal-body" id="modalBodyGen"></div>
+            <div class="modal-footer">
+                <button class="btn-fluent btn-secondary" onclick="closeModalGen()">Cancelar</button>
+                <button class="btn-fluent btn-success" onclick="saveItemGen()"><i class="bi bi-check-circle"></i> Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL RED -->
+    <div class="modal-overlay" id="modalNet">
+        <div class="modal-fluent">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitleNet">Editar</h2>
+                <button class="modal-close" onclick="closeModalNet()"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="modal-body" id="modalBodyNet"></div>
+            <div class="modal-footer">
+                <button class="btn-fluent btn-secondary" onclick="closeModalNet()">Cancelar</button>
+                <button class="btn-fluent btn-success" onclick="saveItemNet()"><i class="bi bi-check-circle"></i> Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DEMANDA -->
+    <div class="modal-overlay" id="modalDemand">
+        <div class="modal-fluent" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitleDemand">Editar Carga</h2>
+                <button class="modal-close" onclick="closeModalDemand()"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="modal-body" id="modalBodyDemand" style="max-height: 70vh; overflow-y: auto;"></div>
+            <div class="modal-footer">
+                <button class="btn-fluent btn-secondary" onclick="closeModalDemand()">Cancelar</button>
+                <button class="btn-fluent btn-success" onclick="saveLoadDemand()"><i class="bi bi-check-circle"></i> Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input ocultos para importar -->
+    <input type="file" id="fileInputGen" accept=".json" style="display: none;">
+    <input type="file" id="fileInputNet" accept=".json" style="display: none;">
+    <input type="file" id="fileInputDemand" accept=".json" style="display: none;">
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/generadoras.js"></script>
+    <script src="js/red.js"></script>
+    <script src="js/demanda.js"></script>
+    <script src="js/demanda-charts.js"></script>
+    <script src="js/debounce-optimized.js"></script>
+    <script src="js/virtual-list.js"></script>
+    <script src="js/search-optimizer.js"></script>
+    <script src="js/worker-manager.js"></script>
+</body>
+</html>
